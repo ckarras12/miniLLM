@@ -26,7 +26,7 @@ TEXT = (
     "For in that sleep of death what dreams may come,\n"
     "To sleep, perchance to dream, ay2, there is the rub:\n"
     "For in that sleep of death what dreams may come,\n"
-    "To sleep, perchance to dream, ay3, there is the rub:\n"
+    "To sleep, perchance to dream, ay2, there is the rub:\n"
     "For in that sleep of death what dreams may come,\n"
     "To sleep, perchance to dream, ay3, there is the rub:\n"
     "For in that sleep of death what dreams may come,\n"
