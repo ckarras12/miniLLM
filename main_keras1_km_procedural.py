@@ -166,9 +166,17 @@ Y_train = []
 for i in range(len(data) - SEQ_LEN):
     X_train.append(data[i : i + SEQ_LEN])
     Y_train.append(data[i + 1 : i + SEQ_LEN + 1])
+    # print(X_train)
+    # print('------------')
+    # print(Y_train)
 
 X_train = tf.stack(X_train)
 Y_train = tf.stack(Y_train)
+print('+++++++++++++++++++++++++++++++++++++++++')
+print(X_train)
+print('------------')
+print(Y_train)
+
 
 print(f"Training examples: {len(X_train)}")
 
@@ -180,6 +188,7 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=LR)
 
 print("\nStarting training...")
 
+#simple training loop
 for step in range(STEPS):
     with tf.GradientTape() as tape:
         # Call forward_pass directly with concrete tensors
@@ -197,6 +206,78 @@ for step in range(STEPS):
         print(f"Step {step:4d}: Loss = {loss:.4f}")
 
 print("Training complete!")
+
+# =============================================================================
+# STEP 7: TRAINING LOOP (Modified to show logits for first 3 rows)
+# =============================================================================
+
+# #analytical
+# for step in range(STEPS):
+#     with tf.GradientTape() as tape:
+#         logits = forward_pass(X_train)  # Shape: (1083, 16, 40)
+        
+#         # Every 200 steps, inspect the first 3 rows in detail
+#         if step % 200 == 0:
+#             print(f"\n{'='*60}")
+#             print(f"STEP {step} - Inspecting first 3 training examples:")
+#             print(f"{'='*60}")
+            
+#             # Show the input text (what the model sees)
+#             print("\n1. INPUT SEQUENCES (what the model receives):")
+#             for i in range(3):
+#                 input_tokens = X_train[i].numpy()
+#                 input_text = decode(input_tokens)
+#                 print(f"   Row {i}: '{input_text}'")
+#                 print(f"         Token IDs: {input_tokens}")
+            
+#             # Show the target text (what we want the model to predict)
+#             print("\n2. TARGET SEQUENCES (what should come next):")
+#             for i in range(3):
+#                 target_tokens = Y_train[i].numpy()
+#                 target_text = decode(target_tokens)
+#                 print(f"   Row {i}: '{target_text}'")
+#                 print(f"         Token IDs: {target_tokens}")
+            
+#             # Show the raw logits shape and statistics
+#             print("\n3. LOGITS (raw neural network outputs):")
+#             print(f"   Shape for first 3 rows: {logits[:3].shape}")  # (3, 16, 40)
+            
+#             # For each of first 3 rows, show logits for the first position only
+#             # (showing all 16*40=640 numbers would be overwhelming)
+#             print("\n   Logits for POSITION 0 of each row (first 10 vocab entries shown):")
+#             for i in range(3):
+#                 pos0_logits = logits[i, 0, :10].numpy()  # First 10 of 40 vocab scores
+#                 print(f"   Row {i}, Pos 0: {pos0_logits}")
+#                 print(f"         Min: {tf.reduce_min(logits[i, 0]).numpy():.2f}, "
+#                       f"Max: {tf.reduce_max(logits[i, 0]).numpy():.2f}")
+            
+#             # Show what the model currently predicts (argmax of logits)
+#             print("\n4. CURRENT PREDICTIONS (argmax of logits):")
+#             predictions = tf.argmax(logits[:3], axis=-1).numpy()  # (3, 16)
+#             for i in range(3):
+#                 pred_tokens = predictions[i]
+#                 pred_text = decode(pred_tokens)
+#                 print(f"   Row {i}: '{pred_text}'")
+#                 print(f"         Token IDs: {pred_tokens}")
+#                 # Show if predictions match targets
+#                 match = "✓ MATCH" if np.array_equal(pred_tokens, Y_train[i].numpy()) else "✗ DIFF"
+#                 print(f"         {match}")
+            
+#             print(f"\n{'='*60}")
+        
+#         # Calculate loss as usual
+#         loss = tf.keras.losses.sparse_categorical_crossentropy(Y_train, logits, from_logits=True)
+#         loss = tf.reduce_mean(loss)
+    
+#     # Backpropagation and update
+#     gradients = tape.gradient(loss, trainable_vars)
+#     optimizer.apply_gradients(zip(gradients, trainable_vars))
+    
+#     # Print loss every 200 steps
+#     if step % 200 == 0:
+#         print(f"Step {step:4d}: Loss = {loss:.4f}")
+
+# print("\nTraining complete!")
 
 # =============================================================================
 # STEP 8: GENERATION
